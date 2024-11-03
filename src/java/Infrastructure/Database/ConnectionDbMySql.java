@@ -26,10 +26,8 @@ public class ConnectionDbMySql {
             Class.forName(DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
             throw new SQLException("Driver not found: " + DRIVER);
         } catch (SQLException ex) {
-            ex.printStackTrace();
             throw new SQLException("Connection error: " + ex.getMessage());
         }
 

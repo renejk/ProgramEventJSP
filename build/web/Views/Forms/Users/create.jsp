@@ -23,17 +23,27 @@
 
         <%-- Formulario de creación de usuario --%>
         <form action="<%= request.getContextPath() %>/Controllers/UserController.jsp?action=create" method="post">
-            <label for="code">Código:</label>
-            <input type="text" name="code" id="code" required>
-            <br><br>
+           
             <label for="name">Nombre:</label>
             <input type="text" name="name" id="name" required>
+            <br><br>
+            <label for="last_name">Apellido:</label>
+            <input type="text" name="last_name" id="last_name" required>
             <br><br>
             <label for="email">Email:</label>
             <input type="text" name="email" id="email" required>
             <br><br>
             <label for="password">Contraseña:</label>
             <input type="password" name="password" id="password" required>
+            <br><br>
+            <label for="role">Rol:</label>
+            <input type="text" name="role" id="role" required>
+            <br><br>
+            <label for="phone">Teléfono:</label>
+            <input type="text" name="phone" id="phone" required>
+            <br><br>
+            <label for="status">Estado:</label>
+            <input type="text" name="status" id="status" required>
             <br><br>
             <input type="submit" value="Agregar Usuario">
         </form>

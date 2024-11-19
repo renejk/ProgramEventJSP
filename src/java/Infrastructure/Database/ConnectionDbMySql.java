@@ -17,8 +17,8 @@ public class ConnectionDbMySql {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/events_web";
     private static final String USER = "root";
-    private static final String PASSWORD = "root";
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
+    private static final String PASSWORD = "";
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     public static Connection getConnection() throws SQLException {
         Connection conn = null;

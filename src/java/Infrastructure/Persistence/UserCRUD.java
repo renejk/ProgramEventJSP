@@ -23,7 +23,7 @@ public class UserCRUD {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users";
+        String query = "SELECT * FROM user";
 
         try {
             Connection conn = ConnectionDbMySql.getConnection();
@@ -43,7 +43,7 @@ public class UserCRUD {
     }
 
     public void addUser(User user) throws SQLException, DuplicateUserException {
-        String query = "INSERT INTO users ( password, name, last_name, role, email, phone, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO user ( password, name, last_name, role, email, phone, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionDbMySql.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, user.getPassword());
@@ -56,6 +56,7 @@ public class UserCRUD {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
+            e.printStackTrace();
             if (e.getErrorCode() == 1062) {
                 throw new DuplicateUserException("User already exists");
             }
@@ -64,7 +65,7 @@ public class UserCRUD {
     }
 
     public void updateUser(User user) throws SQLException, UserNotFoundException {
-        String query = "UPDATE users SET password = ?, name = ?, last_name = ?, role = ?, email = ?, phone = ?, status = ? WHERE id = ?";
+        String query = "UPDATE user SET password = ?, name = ?, last_name = ?, role = ?, email = ?, phone = ?, status = ? WHERE id = ?";
         try (Connection conn = ConnectionDbMySql.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, user.getPassword());
@@ -85,7 +86,7 @@ public class UserCRUD {
     }
 
     public void deleteUser(String id) throws SQLException, UserNotFoundException {
-        String query = "DELETE FROM users WHERE id = ?";
+        String query = "DELETE FROM user WHERE id = ?";
         try (Connection conn = ConnectionDbMySql.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, id);
@@ -99,7 +100,7 @@ public class UserCRUD {
     }
 
     public User getUserById(String id) throws SQLException, UserNotFoundException {
-        String query = "SELECT * FROM users WHERE id = ?";
+        String query = "SELECT * FROM user WHERE id = ?";
         User user = null;
         try (Connection conn = ConnectionDbMySql.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -119,7 +120,7 @@ public class UserCRUD {
     }
 
     public User getUserByEmailAndPassword(String email, String password) throws UserNotFoundException {
-        String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+        String query = "SELECT * FROM user WHERE email = ? AND password = ?";
         User user = null;
         try (Connection conn = ConnectionDbMySql.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -140,7 +141,7 @@ public class UserCRUD {
     }
 
     public User getUserByEmail(String email) throws UserNotFoundException {
-        String query = "SELECT * FROM users WHERE email = ?";
+        String query = "SELECT * FROM user WHERE email = ?";
         User user = null;
         try (Connection conn = ConnectionDbMySql.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -161,7 +162,7 @@ public class UserCRUD {
 
     public List<User> searchUsers(String search) {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE name LIKE CONCAT('%',?,'%') OR last_name LIKE CONCAT('%',?,'%') OR email LIKE CONCAT('%',?,'%')";
+        String query = "SELECT * FROM user WHERE name LIKE CONCAT('%',?,'%') OR last_name LIKE CONCAT('%',?,'%') OR email LIKE CONCAT('%',?,'%')";
 
         try {
             Connection conn = ConnectionDbMySql.getConnection();

@@ -36,6 +36,18 @@ public class User {
         this.created_at = created_at;
     }
 
+    public User(String email, String password, String nombre, String last_name, String role, String phone,
+            String status) {
+        this.email = email;
+        this.password = password;
+        this.name = nombre;
+        this.last_name = last_name;
+        this.role = role;
+        this.phone = phone;
+        this.status = status;
+
+    }
+
     public String getId() {
         return id;
     }

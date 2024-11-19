@@ -35,7 +35,7 @@
                 </tr>
              </thead>
             <tbody>
-                <% List<User> users = (List<User>) request.getAttribute("user"); %>
+                <% List<User> users = (List<User>) request.getAttribute("users"); %>
                 <% if (users != null && !users.isEmpty()) { %>
                     <% for (User user : users) { %>
                         <tr>
@@ -48,8 +48,8 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="UserController.jsp?action=search&code=<%= user.getId() %>">Buscar</a>
-                                <a href="UserController.jsp?action=delete&code=<%= user.getId() %>" onclick="return confirm('¿Está seguro de que desea eliminar este usuario?')">Eliminar</a>
+                                <a href="UserController.jsp?action=search&id=<%= user.getId() %>">Buscar</a>
+                                <a href="UserController.jsp?action=deletefl&id=<%= user.getId() %>" onclick="return confirm('¿Está seguro de que desea eliminar este usuario?')">Eliminar</a>
                             </td>
                         </tr>
                     <% } %>

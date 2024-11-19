@@ -102,7 +102,7 @@
     //Metodo para crear un nuevo usuario (deslues de enviar el formualio de creaci�n)
     private void handleCreateUser(HttpServletRequest request, HttpServletResponse response, HttpSession session, UserService userService)
             throws ServletException, IOException {
-        String nombre = request.getParameter("nombre");
+        String name = request.getParameter("name");
         String last_name = request.getParameter("last_name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -111,7 +111,7 @@
         String status = request.getParameter("status");
 
         try {
-            userService.createUser(email, password, nombre, last_name, role, phone, status);
+            userService.createUser(email, password, name, last_name, role, phone, status);
             request.setAttribute("successMessage", "Usuario creado correctamente");
             handleListAllUsers(request, response, session, userService);
         } catch (DuplicateUserException e) {
@@ -137,10 +137,10 @@
 
         try {
             User user = userService.getUserByCode(searchCode);
-            session.setAttribute("searchUser", user); //Guardamos el usuario en la sesion
+            session.setAttribute("searchedUser", user); //Guardamos el usuario en la sesion
             request.getRequestDispatcher("/Views/Forms/Users/find_edit_delete.jsp").forward(request, response);
         } catch (UserNotFoundException e) {
-            session.removeAttribute("searchUser"); //Limpiamos la sesion si no se encuentra el usuario
+            session.removeAttribute("searchedUser"); //Limpiamos la sesion si no se encuentra el usuario
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/Views/Forms/Users/find_edit_delete.jsp").forward(request, response);
         } catch (SQLException e) {
@@ -169,21 +169,25 @@
     //metodo para actualizar los datos de un usuario
     private void handleUpdateUser(HttpServletRequest request, HttpServletResponse response, HttpSession session, UserService userService)
             throws ServletException, IOException {
-        User searchUser = (User) session.getAttribute("searchUser");
+        User searchedUser = (User) session.getAttribute("searchedUser");
 
-        if (searchUser == null) {
+        if (searchedUser == null) {
             request.setAttribute("errorMessage", "Primero debes buscar un usuario para editar.");
             request.getRequestDispatcher("/Views/Forms/Users/find_edit_delete.jsp").forward(request, response);
             return;
         }
-        String id =searchUser.getId(); //Usamos el id del usuario buscado
-        String nombre = request.getParameter("nombre");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        
+        String id =searchedUser.getId(); //Usamos el id del usuario buscado
+        String name = request.getParameter("name") !=null && !request.getParameter("name").isEmpty() ? request.getParameter("name") : searchedUser.getName();
+        String lastName = request.getParameter("last_name") !=null && !request.getParameter("last_name").isEmpty() ? request.getParameter("last_name") : searchedUser.getLast_name();
+        String email = request.getParameter("email") !=null && !request.getParameter("email").isEmpty() ? request.getParameter("email") : searchedUser.getEmail();
+        String password = request.getParameter("password") !=null && !request.getParameter("password").isEmpty() ? request.getParameter("password") : searchedUser.getPassword();
+        String role = request.getParameter("role") !=null && !request.getParameter("role").isEmpty() ? request.getParameter("role") : searchedUser.getRole();
+        String phone = request.getParameter("phone") !=null && !request.getParameter("phone").isEmpty() ? request.getParameter("phone") : searchedUser.getPhone();
+        String status = request.getParameter("status") !=null && !request.getParameter("status").isEmpty() ? request.getParameter("status") : searchedUser.getStatus();
+
 
         try {
-            userService.updateUser(id, password, nombre, email );
+            userService.updateUser(id, password, name, lastName, email, role, phone, status );
             request.setAttribute("successMessage", "Usuario actualizados correctamente");
             request.getRequestDispatcher("/Views/Forms/Users/find_edit_delete.jsp").forward(request, response);
         } catch (UserNotFoundException e) {
@@ -223,7 +227,7 @@
       //Metodo para eliminar un usuario
       private void handleDeleteUser(HttpServletRequest request, HttpServletResponse response, HttpSession session, UserService userService)
             throws ServletException, IOException {
-            User searchUser = (User) session.getAttribute("searchUser");
+            User searchUser = (User) session.getAttribute("searchedUser");
             if (searchUser == null) {
                 request.setAttribute("errorMessage", "Primero debes buscar un usuario para eliminar.");
                 request.getRequestDispatcher("/Views/Forms/Users/find_edit_delete.jsp").forward(request, response);
@@ -235,7 +239,7 @@
                 userService.deleteUser(id);
                 session.removeAttribute("searchUser");
                 request.setAttribute("successMessage", "Usuario eliminado");
-                  request.getRequestDispatcher( "/Views/Forms/Users/find_edit_delete.jsp").forward(request, response);
+                handleListAllUsers(request, response, session, userService);
                 }catch(UserNotFoundException e){
                     request.setAttribute("errorMessage", e.getMessage());
                     request.getRequestDispatcher("/Views/Forms/Users/find_edit_delete.jsp").forward(request, response);
@@ -251,7 +255,7 @@
                     throws ServletException, IOException {
                  try {
                 List<User> user = userService.getAllUser();
-                    session.setAttribute("users", user); //Guardamos los usuarios en la sesion
+                    request.setAttribute("users", user); //Guardamos los usuarios en la sesion
                     request.getRequestDispatcher("/Views/Forms/Users/list_all.jsp").forward(request, response);
                 } catch (SQLException e) {
                     request.setAttribute("errorMessage", "Error de base de datos al listar los usuarios.");

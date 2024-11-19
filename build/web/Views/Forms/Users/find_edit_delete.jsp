@@ -45,15 +45,11 @@
         <% } %>
 
         <%-- Formulario de búsqueda de usuario --%>
-        <form id="userForm" action="<%= request.getContextPath() %>/Controllers/UserController.jsp?action=find" method="post">
+        <form id="userForm" action="<%= request.getContextPath() %>/Controllers/UserController.jsp" method="post">
            <%-- el valor cambiará según la acción realizada --%>
             <input type="hidden" name="action" id="actionInput" value="search">
 
-            <label for="searchCode">Código del Usuario:</label>
-            <input type="text" name="code" id="code" required value="
-                <%= (session.getAttribute("searchedUser") != null) ? ((User)session.getAttribute("searchedUser")).getId() : "" %>">
-
-            <br><br>
+          
 
             <%-- Detalles del usuario (despues de la búsqueda) --%>
             <% User sessionUser = (User) session.getAttribute("searchedUser"); %>
@@ -62,17 +58,29 @@
                 <h3>Detalles del Usuario</h3>
                 <p><strong>Código:</strong> <%= sessionUser.getId() %></p>
                 <p><strong>Nombre:</strong> <%= sessionUser.getName() %></p>
+                <p><strong>Apellido:</strong><%= sessionUser.getLast_name() %></p>
                 <p><strong>Email:</strong> <%= sessionUser.getEmail() %></p>
+                <p><strong>Teléfono:</strong> <%= sessionUser.getPhone() %></p>
+                <p><strong>Estado:</strong> <%= sessionUser.getStatus() %></p>
+                <p><strong>Creado en:</strong> <%= sessionUser.getCreated_at() %></p>
 
                 <label for="name">Nuevo Nombre:</label>
                 <input type="text" name="name" id="name" value="<%= sessionUser.getName() %>" required>
-                <br><br>
-                <label for="email">Nuevo Email:</label>
-                <input type="email" name="email" id="email" value="<%= sessionUser.getEmail() %>" required>
-                <br><br>
+                <br><br>       
+                  <label for="last_name">Nuevo Apellido:</label>
+                <input type="text" name="last_name" id="last_name" value="<%= sessionUser.getLast_name()%>" required>
+                <br><br>                    
                 <label for="password">Nueva Contraseña:</label>
                 <input type="password" name="password" id="password" required>
                 <br><br>
+                <label for="phone">Nuevo Teléfono:</label>
+                <input type="text" name="phone" id="phone" value="<%= sessionUser.getPhone() %>" required>
+                <br><br>
+                <label for="status">Nuevo Estado:</label>
+                <input type="text" name="status" id="status" value="<%= sessionUser.getStatus() %>" required>
+                <br><br>
+
+
               
             <% } else { %>
                 <p>No se ha encontrado ningún usuario con ese código.</p>

@@ -28,6 +28,13 @@ public class Event {
         this.user_id = user_id;
     }
 
+    public Event(String name, int attendees, String event_date, String user_id) {
+        this.name = name;
+        this.attendees = attendees;
+        this.event_date = event_date;
+        this.user_id = user_id;
+    }
+
     public String getId() {
         return id;
     }

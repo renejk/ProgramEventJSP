@@ -31,14 +31,15 @@
         case "authenticate":
             handleAuthenticate(request, response, session, userService);
             break;
+        case "listEvent":
+            handleListEvent(request, response, session, userService);
+            break;
         case "showCreateForm":
             showCreateUserForm(request, response);
-            break;
-
+            break;       
         case "create":
             handleCreateUser(request, response, session, userService);
-            break;
-        
+            break;        
         case "showFindForm":
             showFindForm(request, response, session, userService);
             break;
@@ -65,8 +66,23 @@
             break;
     }
 
-%>
+%>  
 <%!
+    // Metodo para ir a la lista de eventos
+    private void handleListEvent(HttpServletRequest request, HttpServletResponse response, HttpSession session, UserService userService)
+            throws ServletException, IOException {
+
+            User user = (User) session.getAttribute("searchedUser");
+            if (user == null) {
+                request.setAttribute("errorMessage", "Primero debes buscar un usuario para ver sus eventos.");
+                request.getRequestDispatcher("/Views/Forms/Users/find_edit_delete.jsp").forward(request, response);
+                return;
+            }
+            String id = user.getId(); //Usamos el id del usuario buscado
+
+            response.sendRedirect(request.getContextPath() + "/Controllers/EventController.jsp?action=listAll&id=" + id);
+    }
+
     //metodo para mostrar el formulario de login
     private void handleLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws ServletException, IOException {
@@ -93,7 +109,7 @@
     }
 
 
-    //Mostrar el formulario de creaci�n de usuario
+    //Mostrar el formulario de creación de usuario
     private void showCreateUserForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.sendRedirect(request.getContextPath() + "/Views/Forms/Users/create.jsp");
